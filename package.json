@@ -1,18 +1,20 @@
 {
-  "name": "todo_app_backend",
+  "name": "todo-app-backend-mongo-node-express",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index-dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "pg": "^8.3.3",
-    "pg-hstore": "^2.3.3",
-    "sequelize": "^6.3.4"
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.7"
   },
   "devDependencies": {
     "sequelize-cli": "^6.2.0"

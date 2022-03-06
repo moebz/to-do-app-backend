@@ -1,12 +1,12 @@
-const models = require("../models");
+const mongoose = require("mongoose");
+const { TaskMgModel } = require("./schema");
 
 const getTasks = async (req, res) => {
   try {
-    const tasks = await models.task.findAll({
-      order: [
-        ['created_at', 'DESC'],
-      ],
-    });
+    const sort = {
+      date: "descending",
+    };
+    const tasks = await TaskMgModel.find().sort(sort).exec();
     return res.status(200).json({
       tasks,
     });
@@ -17,7 +17,9 @@ const getTasks = async (req, res) => {
 
 const getTaskById = async (req, res) => {
   try {
-    const task = await models.task.findByPk(req.params.id);
+    const task = await TaskMgModel.findOne({
+      _id: mongoose.Types.ObjectId(req.params._id),
+    });
     return res.status(200).json({
       task,
     });
@@ -27,9 +29,12 @@ const getTaskById = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  console.log('createTask.req.body', req.body);
+  console.log("createTask.req.body", req.body);
   try {
-    const task = await models.task.create({content: req.body.content});
+    const task = new TaskMgModel({ content: req.body.content, createdAt: new Date() });
+
+    await task.save();
+
     return res.status(201).json({
       task,
     });
@@ -39,29 +44,35 @@ const createTask = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
-  console.log(req.params.id);
+  console.log("updateTask", req.params._id);
   try {
-    const task = await models.task.findByPk(req.params.id);
-    if (task === null) {
+    const task = await TaskMgModel.findOne({
+      _id: new mongoose.Types.ObjectId(req.params._id)
+    });
+    if (!task) {
       return res.status(404);
     }
     task.content = req.body.content;
+    task.updatedAt = new Date();
     task.save();
     return res.status(200).json();
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
 
 const deleteTask = async (req, res) => {
   try {
-    const task = await models.task.findByPk(req.params.id);
-    if (task === null) {
+    const task = await TaskMgModel.findOneAndDelete({
+      _id: new mongoose.Types.ObjectId(req.params._id)
+    });
+    if (!task) {
       return res.status(404);
     }
-    task.destroy();
     return res.status(200).json();
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
