@@ -1,8 +1,13 @@
 const log = (...allArgs) => {
-    console.log(...allArgs);
-  };
+  console.log(...allArgs);
+};
 
-  module.exports = {
-    
-    
-    log,}
+const sleep = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+module.exports = {
+  sleep,
+  log,
+};

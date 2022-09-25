@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const { TaskMgModel } = require("./schema");
+const utils = require("./common/utils");
 
 const getTasks = async (req, res) => {
   try {
+    await utils.sleep(4000);
     const sort = {
       date: "descending",
     };
@@ -31,6 +33,7 @@ const getTaskById = async (req, res) => {
 const createTask = async (req, res) => {
   console.log("createTask.req.body", req.body);
   try {
+    // throw new Error('Error de prueba');
     const task = new TaskMgModel({ content: req.body.content, createdAt: new Date() });
 
     await task.save();
